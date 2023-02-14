@@ -15,7 +15,7 @@ const {
   GraphQLNonNull,
 } = graphql;
 
-// main logic
+// types
 const BookType = new GraphQLObjectType({
   name: "Book",
   fields: () => ({
@@ -46,6 +46,7 @@ const AuthorType = new GraphQLObjectType({
   }),
 });
 
+// queries
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -82,6 +83,7 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+// mutations
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -113,6 +115,15 @@ const Mutation = new GraphQLObjectType({
           authorId: args.authorId,
         });
         return book.save();
+      },
+    },
+    deleteBook: {
+      type: BookType,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLID) },
+      },
+      resolve(parent, args) {
+        return Book.findByIdAndDelete(args.id);
       },
     },
   },
